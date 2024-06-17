@@ -1,0 +1,497 @@
+@import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('https://images.pexels.com/photos/11829673/pexels-photo-11829673.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background: #2a16cd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: -18px -19px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+    animation: slideFromTop 0.5s ease-in-out;
+}
+@keyframes slideFromTop {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+h1,
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: cyan;
+}
+
+#user-input {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.animated-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    animation: slideDown 1s ease-in-out;
+    color: wheat;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    animation: fadeIn 1s ease-in-out;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animated-input::placeholder {
+    color: #ccc;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.animated-input:focus::placeholder {
+    opacity: 0;
+}
+
+.animated-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.animated-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    transition: box-shadow 0.3s;
+}
+
+.animated-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #45a049;
+}
+
+.options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+button.correct:hover {
+    background-color: green !important;
+    color: white !important;
+}
+
+.top-players {
+    margin-top: 20px;
+}
+
+.players {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.player img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.player-name {
+    font-size: 16px;
+    color: white;
+}
+
+.player-score {
+    font-size: 14px;
+    color: white;
+}
+
+.container1 {
+    background-color: #ffffff;
+    width: 878px;
+    padding: 34px;
+    margin-top: 21px;
+    border-radius: 7px;
+}
+
+.top-players {
+    margin-bottom: 30px;
+}
+
+hr {
+    border: 1px solid #d1d1d1;
+    margin-bottom: 27px;
+}
+
+/* top players style */
+.section-title {
+    color: #562eff;
+    font-size: 24px;
+    margin-top: 2px;
+}
+
+.players {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 30px;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+}
+
+.player img {
+    height: 58px;
+    width: 58px;
+}
+
+.player-name {
+    margin-left: 17px;
+    font-size: 18px;
+}
+
+/* Define animations */
+@keyframes slideTop {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideBottom {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Apply animations to elements */
+#quizScreen {
+    animation: slideTop 1s forwards;
+}
+
+#question {
+    animation: slideRight 1s forwards;
+}
+
+#options {
+    animation: slideLeft 1s forwards;
+}
+
+.animated-button {
+    animation: slideBottom 1s forwards;
+}
+
+body {
+    font-family: "Michroma", sans-serif;
+    height: 100vh;
+}
+
+.container3 {
+    background-color: black;
+    color: #fff;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.loading-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    color: #191654;
+}
+
+#svg {
+    height: 150px;
+    width: 150px;
+    stroke: white;
+    fill-opacity: 0;
+    stroke-width: 3px;
+    stroke-dasharray: 4500;
+    animation: draw 8s ease;
+}
+
+@keyframes draw {
+    0% {
+        stroke-dashoffset: 4500;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.name-container {
+    height: 30px;
+    overflow: hidden;
+}
+
+.logo-name {
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    margin-left: 20px;
+    font-weight: bolder;
+}
+/* Style for the leaderboard section */
+#leaderboard {
+    display: block; /* Ensure the leaderboard is visible */
+    max-width: 600px; /* Adjust max-width as per your design */
+    margin: 0 auto; /* Center the leaderboard horizontally */
+    padding: 20px; /* Add padding for spacing */
+    border: 1px solid #ccc; /* Add a border for container */
+    background-color: #39b321; /* Light background color */
+    animation: slideFromLeft 0.7s ease-in-out;
+}
+@keyframes slideFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+/* Style for the leaderboard heading */
+#leaderboard h2 {
+    font-size: 24px; /* Larger font size */
+    color: #0dd2ec; /* Dark text color */
+    margin-bottom: 10px; /* Space below heading */
+}
+
+/* Style for the table */
+#leaderboardTable {
+    width: 100%; /* Table width to 100% */
+    border-collapse: collapse; /* Collapse border-spacing */
+    animation: slideFromRight 0.7s ease-in-out;
+}
+@keyframes slideFromRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Style for table headers */
+#leaderboardTable th {
+    background-color: #c56f6f; /* Light gray background */
+    padding: 8px; /* Padding inside table header cells */
+    text-align: left; /* Left-align text in headers */
+    border: 1px solid #08366b; /* Border for table header cells */
+}
+
+/* Style for table rows */
+#leaderboardTable td {
+    padding: 8px; /* Padding inside table cells */
+    border: 1px solid #645252; /* Border for table cells */
+}
+
+/* Style for top players section */
+.top-players {
+    margin-top: 20px; /* Space above top players section */
+}
+
+/* Style for section title */
+.section-title {
+    font-size: 20px; /* Font size for section title */
+    color: #555; /* Dark gray text color */
+    margin-bottom: 10px; /* Space below section title */
+}
+
+/* Style for players container */
+.players {
+    display: flex; /* Use flexbox for player list */
+    flex-wrap: wrap; /* Wrap players if they exceed container width */
+}
+
+/* Style for individual player card (example) */
+.player-card {
+    width: 120px; /* Adjust card width as per design */
+    background-color: #fff; /* White background */
+    border: 1px solid #ccc; /* Border for player cards */
+    margin-right: 10px; /* Space between player cards */
+    margin-bottom: 10px; /* Space below player cards */
+    padding: 10px; /* Padding inside player cards */
+    text-align: center; /* Center-align content */
+}
+/* Style for the options grid */
+#quizScreen .options-grid {
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid columns */
+    gap: 10px; /* Gap between grid items */
+    margin-top: 20px; /* Margin space at the top */
+}
+
+/* Style for individual option items */
+#quizScreen .option {
+    background-color: #f0f0f0; /* Background color */
+    padding: 10px; /* Padding inside options */
+    border: 1px solid #ccc; /* Border around options */
+    text-align: center; /* Center-align text */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Hover effect for options */
+#quizScreen .option:hover {
+    background-color: #e0e0e0; /* Darker background on hover */
+}
+/* CSS for correct answer */
+.correct {
+    background-color: green !important;
+    color: white !important;
+}
+
+.incorrect {
+    background-color: red !important;
+    color: white !important;
+}
+.animated-button:hover {
+    background-color: #45a049;
+}
+
+.options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.options-grid button {
+    background-color: #f4f4f4;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.options-grid button:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+.correct {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.incorrect {
+    background-color: #f44336;
+    color: white;
+}
+
+#question {
+    margin-bottom: 20px;
+}
+
+#timer {
+    margin-top: 10px;
+    font-size: 1.2em;
+}
+#timer{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #0dd2ec;
+}

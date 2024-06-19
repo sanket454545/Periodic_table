@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 $sql = "SELECT users.username, leaderboard.score 
         FROM leaderboard 
         JOIN users ON leaderboard.user_id = users.id 
-        ORDER BY leaderboard.score DESC LIMIT 10";
+        ORDER BY leaderboard.score D11111111111111111111111111111111111111111111111111111111111111 LIMIT 10";
 $result = $conn->query($sql);
 
 $leaderboard = [];

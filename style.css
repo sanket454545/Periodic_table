@@ -23,13 +23,29 @@ body {
 
 .container {
     background: #2a16cd;
-    padding: 20px;
     border-radius: 8px;
     box-shadow: -18px -19px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    text-align: center;
+    width: 100%;
+    padding: 20px;
+     /*width: 400px;
+   text-align: center;*/
     animation: slideFromTop 0.5s ease-in-out;
+    max-width: 500px;
 }
+
+.container>.container-child{
+    background-color: rgb(0, 9, 59);
+    width: 100%;
+}
+
+.container>.container-child h1, .container>.container-child h3{
+    text-align: center;
+}
+
+.container>.container-child h3{
+    color: white;
+}
+
 @keyframes slideFromTop {
     0% {
         transform: translateY(-100%);

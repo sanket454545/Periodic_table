@@ -304,7 +304,7 @@ function checkAnswer(selectedAnswer, correctAnswer) {
         }
 
         nextQuestion();
-    }, 1000);
+    }, 5000);
 }
 
 

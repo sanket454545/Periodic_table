@@ -14,11 +14,15 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch the leaderboard data
-$sql = "SELECT users.username, leaderboard.score 
-        FROM leaderboard 
-        JOIN users ON leaderboard.user_id = users.id 
-        ORDER BY leaderboard.score D11111111111111111111111111111111111111111111111111111111111111 LIMIT 10";
+// Fetch the leaderboard data sorted by max_score descending
+$sql = "SELECT u.username, lb.max_score
+        FROM users u
+        JOIN (
+            SELECT user_id, MAX(score) AS max_score
+            FROM leaderboard
+            GROUP BY user_id
+        ) lb ON u.id = lb.user_id
+        ORDER BY lb.max_score DESC";
 $result = $conn->query($sql);
 
 $leaderboard = [];

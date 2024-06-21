@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Periodic Table Quiz</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </head>
 <body>
-    <!-- Login Form Shailesh-->
-    
+    <!-- Login Screen -->
     <div id="loginScreen" class="container">
         <div class="container container-child">
             <h1>Welcome to Periodic Game</h1>
             <h3>Are you ready!</h3>
-        </div>    
+        </div>
         <h2>Login</h2>
         <div id="login-input">
             <label class="animated-label" for="loginUsername">Username:</label>
@@ -24,7 +23,6 @@
         </div>
         <button class="animated-button" onclick="login()">Login</button>
         <p>Don't have an account? <a href="#" onclick="showRegisterScreen()">Register here</a></p>
-   
     </div>
 
     <!-- Registration Form -->
@@ -39,7 +37,12 @@
             <input class="animated-input" type="password" id="registerPassword" placeholder="Enter your password">
         </div>
         <button class="animated-button" onclick="register()">Register</button>
-        <p>Already have an account? <a href="#" onclick="showLoginScreen()"> Login here</a></p>
+        <p>Already have an account? <a href="#" onclick="showLoginScreen()">Login here</a></p>
+    </div>
+
+    <!-- Help Screen -->
+    <div id="help" style="display: none;">
+        <a href="https://www.acs.org/content/acs/en/education/whatischemistry/periodictable/_jcr_content/articleContent/columnsbootstrap_433839713/column1/textimage/image.img.png/1709568884985.png" onclick="showHelp()">Help</a>
     </div>
 
     <!-- Welcome Screen -->
@@ -53,37 +56,39 @@
     </div>
 
     <!-- Quiz Screen -->
+  
+    <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: inline-block;">End Quiz</button>
     <div id="quizScreen" class="container" style="display: none;">
-        <h2 id="question">#</h2>
+         
+        <h2 id="question" class="question-text">#</h2>
         <div id="options" class="options-grid"></div>
-        <p id="timer">Time left: 20s</p>
-        <button class="animated-button" onclick="endQuiz()">End Quiz</button>
+        <p id="timer">Time left: 5:00</p>
+        <button id="nextButton" class="animated-button" onclick="handleNext()" style="display: none;position: absolute;display: inline;">Next</button>
     </div>
 
     <!-- Leaderboard Screen -->
-    <!-- Leaderboard Screen -->
-<div id="leaderboard" class="container1" style="display: none;">
-    <h2>Leaderboard</h2>
-    <p>Logged in as: <span id="loggedInUsername"></span></p>
-    <table id="leaderboardTable" border="1">
-        <tr>
-            <th>Name</th>
-            <th>Score</th>
-        </tr>
-    </table>
-    <div class="top-players">
-        <h2 class="section-title">Top Players</h2>
-        <div class="players">
-            <!-- Players will be dynamically added here -->
+    <div id="leaderboard" class="container" style="display: none;">
+        <h2>Leaderboard</h2>
+        <p id="cont">Top Players <span id="loggedInUsername"></span></p>
+        <table id="leaderboardTable" border="1">
+            <tr>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+        </table>
+        <div class="top-players">
+            <h2 class="section-title">Top Players</h2>
+            <div class="players">
+                <!-- Players will be dynamically added here -->
+            </div>
+        </div>
+        <button class="animated-button" onclick="logout()">Logout</button>
+        <button class="animated-button" onclick="playAgain()">Play Again</button>
+       
+        <div id="userStats" style="display: none;">
+            <!-- User stats will be displayed here -->
         </div>
     </div>
-    <button class="animated-button" onclick="logout()">Logout</button>
-    <button class="animated-button" onclick="playAgain()">Play Again</button>
-    <button class="animated-button" onclick="showUserStats()">Show My Stats</button>
-    <div id="userStats" style="display: none;">
-        <!-- User stats will be displayed here -->
-    </div>
-</div>
 
 </body>
 </html>

@@ -119,20 +119,33 @@ const elements = [
     { symbol: 'Og	', name: 'Oganesson	', atomicNumber: 118, metals: "Unknown properties" },
 ];
 let loggedInUserId = ''; // Track the logged-in user ID globally
-
 let score = 0;
 let username = '';
 let timer;
-let timeLeft = 20;
+let timeLeft = 300; // Changed to 5 minutes (300 seconds)
+let isAnswerSelected = false;
+let isNextEnabled = false; // Track if 'Next' button should be enabled
 
 function showRegisterScreen() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('registerScreen').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';// Show end quiz button
+}
+
+function showHelp() {
+    document.getElementById('Help').style.display = 'block';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';
 }
 
 function showLoginScreen() {
     document.getElementById('registerScreen').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';// Show end quiz button
 }
 
 function register() {
@@ -157,9 +170,6 @@ function register() {
     });
 }
 
-
-
-// Update the login function to store the user ID
 function login() {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
@@ -181,25 +191,38 @@ function login() {
     });
 }
 
-
 function startQuiz(loggedInUserId) {
-    user_id = loggedInUserId;
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('welcomeScreen').style.display = 'none';
-    document.getElementById('quizScreen').style.display = 'block';
-    timer = setInterval(updateTimer, 1000);
-    nextQuestion();
+    user_id = loggedInUserId; // Assuming user_id is a global variable for the logged-in user
+    document.getElementById('loginScreen').style.display = 'none'; // Hide login screen
+    document.getElementById('welcomeScreen').style.display = 'none'; // Hide welcome screen
+    document.getElementById('quizScreen').style.display = 'block'; // Show quiz screen
+    timer = setInterval(updateTimer, 1000); // Start quiz timer
+    enableNextButton(); // Enable 'Next' button initially
+    document.addEventListener('keydown', handleEnterKey); // Listen for Enter key
+    updateTimerDisplay(); // Initialize timer display
+    nextQuestion(); // Start with the first question
 }
 
 function updateTimer() {
     timeLeft -= 1;
-    document.getElementById('timer').innerText = `Time left: ${timeLeft}s`;
+    updateTimerDisplay();
+
     if (timeLeft <= 0) {
         endQuiz();
     }
 }
 
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer').innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
 function nextQuestion() {
+    if (!isNextEnabled) return; // Check if 'Next' button is enabled
+
+    disableNextButton(); // Disable 'Next' button until an answer is selected
+
     const questionType = Math.floor(Math.random() * 3);
     let question = '';
     let correctAnswer = '';
@@ -209,25 +232,46 @@ function nextQuestion() {
         case 0:
             const randomElement1 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement1.name;
-            question = `What is the name of the element with symbol ${randomElement1.symbol}?`;
+            question = `What is the name of the element with symbol <br><span class="highlight" style="color:red;text-align:center; font-size:larger;font-size:50px;">${randomElement1.symbol}</span>?`;
             options = getOptions(correctAnswer, 'name');
             break;
         case 1:
             const randomElement2 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement2.metals;
-            question = `What is the category of metals for the element ${randomElement2.name}?`;
+            question = `What is the category of metals for the element<br> <span class="highlight" style="color:red;text-align:center; font-size:larger;font-size:50px;">${randomElement2.name}</span>?`;
             options = getOptions(correctAnswer, 'metals');
             break;
         case 2:
             const randomElement3 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement3.name;
-            question = `What is the name of the element with atomic number ${randomElement3.atomicNumber}?`;
+            question = `What is the name of the element with atomic number<br> <span class="highlight" style="color:red;text-align:center; font-size:larger;font-size:50px;">${randomElement3.atomicNumber}</span>?`;
             options = getOptions(correctAnswer, 'name');
             break;
     }
 
     displayQuestion(question, options, correctAnswer);
 }
+
+function displayQuestion(question, options, correctAnswer) {
+    isAnswerSelected = false;
+    const questionText = document.getElementById('question');
+    questionText.innerHTML = question; // Set the question with highlighted spans
+
+    const optionsContainer = document.getElementById('options');
+    optionsContainer.innerHTML = ''; // Clear existing options
+
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.innerText = option;
+        button.onclick = () => checkAnswer(button, correctAnswer);
+        optionsContainer.appendChild(button);
+    });
+
+    disableOptions(); // Disable options until 'Next' button is clicked
+}
+
+const correctSound = new Audio('assets/sounds/correct-156911.mp3');
+const incorrectSound = new Audio('assets/sounds/wronganswer-37702.mp3');
 
 function getOptions(correctAnswer, key) {
     const options = new Set();
@@ -247,72 +291,107 @@ function shuffle(array) {
     return array;
 }
 
-function displayQuestion(question, options, correctAnswer) {
-    document.getElementById('question').innerText = question;
-    const optionsContainer = document.getElementById('options');
-    optionsContainer.innerHTML = '';
-    options.forEach(option => {
-        const button = document.createElement('button');
-        button.innerText = option;
-        button.onclick = () => checkAnswer(option, correctAnswer);
-        optionsContainer.appendChild(button);
-    });
-}
+function checkAnswer(button, correctAnswer) {
+    if (isAnswerSelected) return; // Prevent changing answer
+    isAnswerSelected = true; // This assumes isAnswerSelected is declared and initialized somewhere in your code
 
-function checkAnswer(selectedAnswer, correctAnswer) {
     const buttons = document.querySelectorAll('#options button');
-    buttons.forEach(button => {
-        button.disabled = true;
-        if (button.innerText === correctAnswer) {
-            button.classList.add('correct');
-        } else if (button.innerText === selectedAnswer) {
-            button.classList.add('incorrect');
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.innerText === correctAnswer) {
+            btn.classList.add('correct');
+        } else if (btn === button) {
+            btn.classList.add('incorrect');
         }
     });
 
-    // Find the correct button and add message next to it
-    const correctButton = Array.from(buttons).find(button => button.innerText === correctAnswer);
-    if (correctButton) {
-        correctButton.classList.add('correct-message');
-        const correctElement = elements.find(element => element.name === correctAnswer);
-        if (correctElement) {
-            const message = document.createElement('div');
-            message.classList.add('message');
-            message.innerHTML = `
-                Correct answer: ${correctAnswer}<br>
-                Symbol: ${correctElement.symbol}<br>
-                Atomic Number: ${correctElement.atomicNumber}<br>
-                Metals: ${correctElement.metals}
-            `;
-            correctButton.parentNode.appendChild(message);
-        }
+    const elementInfo = elements.find(el => el.name === correctAnswer);
+    if (elementInfo) {
+        displayElementInfo(elementInfo);
     }
 
-    setTimeout(() => {
-        buttons.forEach(button => {
-            button.disabled = false;
-            button.classList.remove('correct', 'incorrect', 'correct-message');
-            // Remove previous message
-            const prevMessage = button.parentNode.querySelector('.message');
-            if (prevMessage) {
-                prevMessage.remove();
-            }
-        });
+    if (button.innerText === correctAnswer) {
+        correctSound.play(); // Assuming correctSound is defined and plays the correct sound
+        score += 1; // Assuming score is a variable that tracks correct answers
+    } else {
+        incorrectSound.play(); // Assuming incorrectSound is defined and plays the incorrect sound
+    }
 
-        if (selectedAnswer === correctAnswer) {
-            score += 1;
-        }
-
-        nextQuestion();
-    }, 5000);
+    enableNextButton(); // Assuming enableNextButton() is defined somewhere to enable a 'Next' button
 }
 
+// Function to display element information
+function displayElementInfo(element, correctAnswer) {
+    clearElementInfo(); // Clear any existing element info before displaying new info
+
+    const elementInfoBox = document.createElement('div');
+    elementInfoBox.className = 'element-info-box';
+    elementInfoBox.style.border = '2px solid cyan'; // Add border style
+    elementInfoBox.style.color = 'cyan'; // Set text color
+    elementInfoBox.style.padding = '10px'; 
+    elementInfoBox.style.marginLeft = '200px'; // Add padding for better visual
+
+    let message = '';
+    if (element.name === correctAnswer) {
+        message = 'Correct! ';
+    } else {
+        message = 'Incorrect. The correct answer is: ';
+    }
+
+    message += `${correctAnswer}`;
+
+    elementInfoBox.innerHTML = `
+      
+        <p><strong>Symbol:</strong> ${element.symbol}</p>
+        <p><strong>Name:</strong> ${element.name}</p>
+        <p><strong>Atomic Number:</strong> ${element.atomicNumber}</p>
+        <p><strong>Category:</strong> ${element.metals}</p>
+    `;
+    document.getElementById('quizScreen').appendChild(elementInfoBox);
+}
+
+// Function to clear element information
+function clearElementInfo() {
+    const existingElementInfo = document.querySelector('.element-info-box');
+    if (existingElementInfo) {
+        existingElementInfo.remove();
+    }
+}
+
+// Function to clear answer feedback
+function clearAnswerFeedback() {
+    const buttons = document.querySelectorAll('#options button');
+    buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'incorrect');
+    });
+}
 
 function endQuiz() {
-    clearInterval(timer);
-    document.getElementById('quizScreen').style.display = 'none';
-    document.getElementById('leaderboard').style.display = 'block';
-    updateLeaderboard(loggedInUserId, score); // Pass user ID and score to updateLeaderboard
+    console.log("endQuiz called"); // Debugging log
+    clearInterval(timer); // Assuming 'timer' is defined elsewhere to track quiz time
+
+    const scoreData = { score: score }; // Assuming 'score' is defined elsewhere
+
+    // Send score data to save_score.php
+    fetch('save_score.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(scoreData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Score saved successfully') {
+            displayLeaderboard(); // After saving score, update leaderboard
+        } else {
+            alert(data.message); // Handle error if score couldn't be saved
+        }
+    })
+    .catch(error => {
+        console.error('Error saving score:', error);
+    });
+
+    document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
 }
 
 async function updateLeaderboard(user_id, score) {
@@ -322,17 +401,251 @@ async function updateLeaderboard(user_id, score) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                user_id: user_id,
-                score: score,
-            }),
+            body: JSON.stringify({ score: score }),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Failed to save score');
+            throw new Error(data.message || 'Failed to save score');
         }
 
+        console.log(data.message); // Log success message
+        displayLeaderboard(); // Update leaderboard after saving score
+    } catch (error) {
+        console.error('Error saving score:', error);
+    }
+}
+
+// Add CSS for the highlighted spans
+const style = document.createElement('style');
+style.innerHTML = `
+    .highlight {
+        color: red;
+        font-size: larger;
+        font-weight: bold;
+    }
+`;
+document.head.appendChild(style);
+
+async function displayLeaderboard() {
+    console.log("displayLeaderboard called"); // Debugging log
+    try {
+        const response = await fetch('get_leaderboard.php');
+        if (!response.ok) {
+            throw new Error('Failed to fetch leaderboard');
+        }
+
+        const leaderboard = await response.json();
+        console.log(leaderboard); // Check if data is received correctly
+
+        const leaderboardTable = document.getElementById('leaderboardTable');
+        leaderboardTable.innerHTML = ''; // Clear existing rows
+
+        leaderboard.forEach(entry => {
+            const newRow = leaderboardTable.insertRow();
+            const nameCell = newRow.insertCell(0);
+            const scoreCell = newRow.insertCell(1);
+
+            nameCell.textContent = entry.username;
+            scoreCell.textContent = entry.max_score;
+        });
+
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+    }
+}
+
+// Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
+
+
+function logout() {
+    fetch('logout.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Logout request failed');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message); // Display logout message
+        showLoginScreen(); // Show login screen after successful logout
+    })
+    .catch(error => {
+        console.error('Logout failed:', error);
+    });
+
+    // Hide all relevant screens and buttons
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';
+}
+
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';
+}
+
+function showLeaderboardScreen() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboard').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'none';
+}
+
+function showHelp() {
+    document.getElementById('Help').style.display = 'block';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+}
+
+function playAgain() {
+    clearInterval(timer);
+    score = 0;
+    timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'block';
+    timer = setInterval(updateTimer, 1000);
+    enableNextButton(); // Ensure 'Next' button is enabled when playing again
+    nextQuestion();
+}
+
+function handleEnterKey(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission or other default Enter key behavior
+        handleNext();
+    }
+}
+
+function handleNext() {
+    if (isNextEnabled) {
+        nextQuestion();
+    }
+}
+
+function enableNextButton() {
+    isNextEnabled = true;
+    document.getElementById('nextButton').style.display = 'block';
+}
+
+function disableNextButton() {
+    isNextEnabled = false;
+    document.getElementById('nextButton').style.display = 'none';
+}
+function endQuiz() {
+    clearInterval(timer); // Stop the timer
+
+    const scoreData = { user_id: loggedInUserId, score: score };
+
+    fetch('save_score.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(scoreData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Score saved successfully') {
+            showLeaderboardScreen(); // Transition to leaderboard screen
+            displayLeaderboard(); // Optionally load leaderboard data immediately
+            document.getElementById('endQuizButton').style.display = 'none'; // Hide end quiz button after quiz ends
+        } else {
+            alert(data.message); // Handle error if score couldn't be saved
+        }
+    });
+
+    document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button during quiz
+}
+
+function enableNextButton() {
+    isNextEnabled = true;
+    document.getElementById('nextButton').style.display = 'block';
+}
+
+function disableNextButton() {
+    isNextEnabled = false;
+    document.getElementById('nextButton').style.display = 'none';
+}
+
+// Function to start the quiz upon user login
+function startQuiz(loggedInUserId) {
+    user_id = loggedInUserId;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'block';
+    timer = setInterval(updateTimer, 1000);
+    enableNextButton(); // Enable 'Next' button initially
+    document.addEventListener('keydown', handleEnterKey); // Listen for Enter key
+    updateTimerDisplay(); // Initialize timer display
+    nextQuestion(); // Start with the first question
+}
+
+// Function to update the timer display
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer').innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+// Function to handle the end of the quiz
+function endQuiz() {
+    clearInterval(timer); // Stop the timer
+
+    const scoreData = { user_id: loggedInUserId, score: score };
+
+    fetch('save_score.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(scoreData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Score saved successfully') {
+            showLeaderboardScreen(); // Transition to leaderboard screen
+            displayLeaderboard(); // Optionally load leaderboard data immediately
+            document.getElementById('endQuizButton').style.display = 'block'; // Hide end quiz button after quiz ends
+        } else {
+            alert(data.message); // Handle error if score couldn't be saved
+        }
+    });
+
+    document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button during quiz
+}
+
+function showLeaderboardScreen() {
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboardScreen').style.display = 'block';
+}
+
+// Function to update the leaderboard asynchronously
+async function updateLeaderboard(user_id, score) {
+    try {
+        const response = await fetch('save_score.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ score: score }),
+        });
+
         const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to save score');
+        }
+
         console.log(data.message);
         displayLeaderboard();
     } catch (error) {
@@ -348,12 +661,13 @@ async function displayLeaderboard() {
         }
 
         const leaderboard = await response.json();
+        console.log(leaderboard); // Log the leaderboard for debugging
         const leaderboardTable = document.getElementById('leaderboardTable');
         leaderboardTable.innerHTML = `
             <tr>
                 <th>Name</th>
                 <th>Score</th>
-                <th>Stats</th>
+                
             </tr>
         `;
 
@@ -364,63 +678,37 @@ async function displayLeaderboard() {
             const statsCell = newRow.insertCell(2); // Cell for stats button
 
             nameCell.innerText = entry.username;
-            scoreCell.innerText = entry.score;
+            scoreCell.innerText = entry.max_score !== undefined ? entry.max_score : 'N/A'; // Use max_score instead of score
 
             const statsButton = document.createElement('button'); // Create stats button
-            statsButton.innerText = 'Stats';
+          
             statsButton.onclick = () => showStats(entry.username); // Show stats onclick
             statsCell.appendChild(statsButton); // Append button to cell
         });
 
         const loggedInUsername = document.getElementById('loggedInUsername');
-        loggedInUsername.innerText = loggedInUsername; // Update displayed username
+        loggedInUsername.innerText = loggedInUsername.innerText; // Update displayed username
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
 }
 
-function showStats(username) {
-    // Fetch and display stats for the selected username
-    console.log(`Fetching stats for ${username}`);
-    // Implement fetching and displaying stats from database
-}
 
-
-// Function to handle logout
-function logout() {
-    fetch('logout.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Logout request failed');
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert(data.message); // Optional: Show logout message
-        showLoginScreen(); // After logout, show the login screen
-    })
-    .catch(error => {
-        console.error('Logout failed:', error);
-    });
-
-    // Hide other screens
-    document.getElementById('welcomeScreen').style.display = 'none';
+    clearInterval(timer);
     document.getElementById('quizScreen').style.display = 'none';
-    document.getElementById('leaderboard').style.display = 'none';
-}
+    document.getElementById('leaderboard').style.display = 'block';
+    updateLeaderboard(loggedInUserId, score); // Pass user ID and score to updateLeaderboard
 
-// Function to show the login screen
+
+
+// Function to handle showing the login screen
 function showLoginScreen() {
     document.getElementById('loginScreen').style.display = 'block';
     document.getElementById('registerScreen').style.display = 'none';
     document.getElementById('welcomeScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none'; // Show end quiz button
 }
 
 // Function to show the leaderboard screen
@@ -430,18 +718,60 @@ function showLeaderboardScreen() {
     document.getElementById('welcomeScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'none'; // Show end quiz button
 }
 
+// Function to show the help screen
+function showHelp() {
+    document.getElementById('Help').style.display = 'block';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+}
 
+// Function to start a new game (play again)
 function playAgain() {
     clearInterval(timer);
     score = 0;
-    timeLeft = 20;
+    timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'block';
     timer = setInterval(updateTimer, 1000);
+    enableNextButton(); // Ensure 'Next' button is enabled when playing again
     nextQuestion();
 }
+
+// Function to handle Enter key press
+function handleEnterKey(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission or other default Enter key behavior
+        handleNext();
+    }
+}
+
+// Function to handle the 'Next' button click
+function handleNext() {
+    if (isNextEnabled) {
+        nextQuestion();
+    }
+}
+
+// Function to enable the 'Next' button
+function enableNextButton() {
+    isNextEnabled = true;
+    document.getElementById('nextButton').style.display = 'block';
+}
+
+// Function to disable the 'Next' button
+function disableNextButton() {
+    isNextEnabled = false;
+    document.getElementById('nextButton').style.display = 'none';
+}
+
+// Elements array (assuming it's defined elsewhere)
+
+
+// Other functions (e.g., displayQuestion, checkAnswer, etc.) remain unchanged
+
 async function updateLeaderboard(username, score) {
     try {
         const response = await fetch('save_score.php', {
@@ -461,8 +791,8 @@ async function updateLeaderboard(username, score) {
 
         const data = await response.json();
         console.log(data.message);
-        saveStats(username, score); // Save game stats after saving score
-        displayLeaderboard();
+        await saveStats(username, score); // Wait for saving stats after saving score
+        await displayLeaderboard(); // Display leaderboard after updating
     } catch (error) {
         console.error('Error saving score:', error);
     }
@@ -491,6 +821,22 @@ async function saveStats(username, score) {
         console.error('Error saving stats:', error);
     }
 }
+
+function showLeaderboard() {
+    fetch('leaderboard.php')
+    .then(response => response.json())
+    .then(leaderboard => {
+        const leaderboardTable = document.getElementById('leaderboardTable');
+        leaderboardTable.innerHTML = ''; // Clear existing table content
+        leaderboard.forEach(entry => {
+            const row = `<tr><td>${entry.username}</td><td>${entry.max_score}</td></tr>`;
+            leaderboardTable.innerHTML += row;
+        });
+        document.getElementById('quizScreen').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'block';
+    });
+}
+
 function showUserStats() {
     fetch('get_user_stats.php')
         .then(response => response.json())

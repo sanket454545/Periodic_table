@@ -125,18 +125,14 @@ let timeLeft = 300; // 5 minutes (300 seconds)
 let isAnswerSelected = false;
 let isNextEnabled = false; // Track if 'Next' button should be enabled
 
-const correctSound = new Audio('assets/sounds/correct-156911.mp3');
-const incorrectSound = new Audio('assets/sounds/wronganswer-37702.mp3');
-
 // Show different screens
 function showScreen(screenId) {
-    const screens = ['loginScreen', 'registerScreen', 'quizScreen', 'leaderboard', 'Help', 'endQuizButton'];
+    const screens = ['loginScreen', 'registerScreen', 'quizScreen', 'leaderboard', 'Help',  'endQuizButton',];
     screens.forEach(id => {
         document.getElementById(id).style.display = (id === screenId) ? 'block' : 'none';
     });
 }
 
-// Registration function
 function register() {
     const username = document.getElementById('registerUsername').value;
     const email = document.getElementById('registerEmail').value;
@@ -152,12 +148,13 @@ function register() {
         alert(data.message);
         if (data.message === 'Registration successful') {
             showScreen('loginScreen');
+           
         }
     });
 }
 
-// Login function
 function login() {
+   
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -172,11 +169,12 @@ function login() {
         if (data.message === 'Login successful') {
             loggedInUserId = data.user_id;
             startQuiz();
+              document.getElementById('endQuizButton').style.display = 'block';
+            
         }
     });
 }
 
-// Start the quiz
 function startQuiz() {
     showScreen('quizScreen');
     timer = setInterval(updateTimer, 1000);
@@ -186,10 +184,10 @@ function startQuiz() {
     nextQuestion();
 }
 
-// Timer update
 function updateTimer() {
     timeLeft -= 1;
     updateTimerDisplay();
+
     if (timeLeft <= 0) {
         endQuiz();
     }
@@ -201,31 +199,32 @@ function updateTimerDisplay() {
     document.getElementById('timer').innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
-// Fetch the next question
 function nextQuestion() {
     if (!isNextEnabled) return;
     clearElementInfo();
     disableNextButton();
-
     const questionType = Math.floor(Math.random() * 3);
     let question = '';
     let correctAnswer = '';
     let options = [];
 
-    const randomElement = elements[Math.floor(Math.random() * elements.length)];
-    correctAnswer = randomElement.name;
-
     switch (questionType) {
         case 0:
-            question = `What is the name of the element with symbol <br><span class="highlight">${randomElement.symbol}</span>?`;
+            const randomElement1 = elements[Math.floor(Math.random() * elements.length)];
+            correctAnswer = randomElement1.name;
+            question = `What is the name of the element with symbol <br><span class="highlight">${randomElement1.symbol}</span>?`;
             options = getOptions(correctAnswer, 'name');
             break;
         case 1:
-            question = `What is the symbol for the element<br> <span class="highlight">${randomElement.metals}</span>?`;
-            options = getOptions(correctAnswer, 'name');
+            const randomElement2 = elements[Math.floor(Math.random() * elements.length)];
+            correctAnswer = randomElement2.name; // Set correct answer to name instead of symbol
+            question = `What is the symbol for the element<br> <span class="highlight">${randomElement2.metals}</span>?`;
+            options = getOptions(correctAnswer, 'name'); // Fetch options based on 'name' of the element
             break;
         case 2:
-            question = `What is the name of the element with atomic number<br> <span class="highlight">${randomElement.atomicNumber}</span>?`;
+            const randomElement3 = elements[Math.floor(Math.random() * elements.length)];
+            correctAnswer = randomElement3.name;
+            question = `What is the name of the element with atomic number<br> <span class="highlight">${randomElement3.atomicNumber}</span>?`;
             options = getOptions(correctAnswer, 'name');
             break;
     }
@@ -233,21 +232,22 @@ function nextQuestion() {
     displayQuestion(question, options, correctAnswer);
 }
 
-// Generate options
 function getOptions(correctAnswer, key) {
     const options = new Set();
     options.add(correctAnswer);
     while (options.size < 4) {
-        const randomOption = elements[Math.floor(Math.random() * elements.length)][key];
-        if (randomOption !== correctAnswer) options.add(randomOption);
+        const randomIndex = Math.floor(Math.random() * elements.length);
+        const randomOption = elements[randomIndex][key];
+        if (randomOption === correctAnswer) continue; // Skip adding correct option again
+        options.add(randomOption);
     }
     return shuffle(Array.from(options));
 }
 
-// Display question and options
 function displayQuestion(question, options, correctAnswer) {
     isAnswerSelected = false;
-    document.getElementById('question').innerHTML = question;
+    const questionText = document.getElementById('question');
+    questionText.innerHTML = question;
 
     const optionsContainer = document.getElementById('options');
     optionsContainer.innerHTML = '';
@@ -262,7 +262,9 @@ function displayQuestion(question, options, correctAnswer) {
     disableOptions();
 }
 
-// Shuffle options
+const correctSound = new Audio('assets/sounds/correct-156911.mp3');
+const incorrectSound = new Audio('assets/sounds/wronganswer-37702.mp3');
+
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -271,12 +273,12 @@ function shuffle(array) {
     return array;
 }
 
-// Check the selected answer
 function checkAnswer(button, correctAnswer) {
     if (isAnswerSelected) return;
     isAnswerSelected = true;
 
-    document.querySelectorAll('#options button').forEach(btn => {
+    const buttons = document.querySelectorAll('#options button');
+    buttons.forEach(btn => {
         btn.disabled = true;
         if (btn.innerText === correctAnswer) {
             btn.classList.add('correct');
@@ -285,11 +287,15 @@ function checkAnswer(button, correctAnswer) {
         }
     });
 
-    displayElementInfo(elements.find(el => el.name === correctAnswer));
+    const elementInfo = elements.find(el => el.name === correctAnswer);
+    if (elementInfo) {
+        displayElementInfo(elementInfo);
+    }
 
     if (button.innerText === correctAnswer) {
         correctSound.play();
         score += 1;
+        updateScoreDisplay();
     } else {
         incorrectSound.play();
     }
@@ -298,7 +304,6 @@ function checkAnswer(button, correctAnswer) {
     enableNextButton();
 }
 
-// Display element information
 function displayElementInfo(element) {
     clearElementInfo();
 
@@ -318,7 +323,6 @@ function displayElementInfo(element) {
     document.getElementById('quizScreen').appendChild(elementInfoBox);
 }
 
-// Clear element information
 function clearElementInfo() {
     const existingElementInfo = document.querySelector('.element-info-box');
     if (existingElementInfo) {
@@ -326,37 +330,80 @@ function clearElementInfo() {
     }
 }
 
-// Update score display
 function updateScoreDisplay() {
     document.getElementById('scoree').innerText = `Score: ${score}`;
 }
 
-// End the quiz
 function endQuiz() {
-    clearInterval(timer);
+    console.log("endQuiz called"); // Debugging log
+    clearInterval(timer); // Assuming 'timer' is defined elsewhere to track quiz time
 
+    const scoreData = { score: score }; // Assuming 'score' is defined elsewhere
+
+    // Send score data to save_score.php
     fetch('save_score.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ score })
+        body: JSON.stringify(scoreData)
     })
     .then(response => response.json())
     .then(data => {
         if (data.message === 'Score saved successfully') {
-            displayLeaderboard();
+            displayLeaderboard(); // After saving score, update leaderboard
         } else {
-            alert(data.message);
+            alert(data.message); // Handle error if score couldn't be saved
         }
     })
     .catch(error => {
         console.error('Error saving score:', error);
     });
 
-    document.getElementById('endQuizButton').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none';
 }
 
-// Display leaderboard
+function updateScoreDisplay() {
+    document.getElementById('scoree').innerText = `Score: ${score}`;
+}
+async function updateLeaderboard(user_id, score) {
+    try {
+        const response = await fetch('save_score.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ score: score }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to save score');
+        }
+
+        console.log(data.message); // Log success message
+        displayLeaderboard(); // Update leaderboard after saving score
+    } catch (error) {
+        console.error('Error saving score:', error);
+    }
+}
+
+// Add CSS for the highlighted spans
+const style = document.createElement('style');
+style.innerHTML = `
+    .highlight {
+        color: red;
+        font-size: larger;
+        font-weight: bold;
+    }
+`;
+document.head.appendChild(style);
+
 async function displayLeaderboard() {
+    console.log("displayLeaderboard called"); // Debugging log
     try {
         const response = await fetch('get_leaderboard.php');
         if (!response.ok) {
@@ -364,9 +411,10 @@ async function displayLeaderboard() {
         }
 
         const leaderboard = await response.json();
+        console.log(leaderboard); // Check if data is received correctly
 
         const leaderboardTable = document.getElementById('leaderboardTable');
-        leaderboardTable.innerHTML = '';
+        leaderboardTable.innerHTML = ''; // Clear existing rows
 
         leaderboard.forEach(entry => {
             const newRow = leaderboardTable.insertRow();
@@ -382,11 +430,15 @@ async function displayLeaderboard() {
     }
 }
 
-// Logout function
+// Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
+
+
 function logout() {
     fetch('logout.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
     .then(response => {
         if (!response.ok) {
@@ -395,83 +447,72 @@ function logout() {
         return response.json();
     })
     .then(data => {
-        alert(data.message);
-        showLoginScreen();
+        alert(data.message); // Display logout message
+        showLoginScreen(); // Show login screen after successful logout
     })
     .catch(error => {
         console.error('Logout failed:', error);
     });
 
+    // Hide all relevant screens and buttons
     document.getElementById('welcomeScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('endQuizButton').style.display = 'none';
 }
 
-// Show login screen
-function showLoginScreen() {
-    showScreen('loginScreen');
-}
 
-// Show leaderboard screen
+
+
 function showLeaderboardScreen() {
-    showScreen('leaderboard');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('leaderboard').style.display = 'block';
+    document.getElementById('endQuizButton').style.display = 'none';
 }
 
-// Show help screen
 function showHelp() {
-    showScreen('Help');
+    document.getElementById('Help').style.display = 'block';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
 }
 
-// Play again function
 function playAgain() {
     clearInterval(timer);
     score = 0;
-    timeLeft = 300;
-    showScreen('quizScreen');
+    timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'block';
     timer = setInterval(updateTimer, 1000);
-    enableNextButton();
+    enableNextButton(); // Ensure 'Next' button is enabled when playing again
     nextQuestion();
+    endQuiz()
 }
 
-// Handle enter key
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
-        event.preventDefault();
+        event.preventDefault(); // Prevent form submission or other default Enter key behavior
         handleNext();
     }
 }
 
-// Handle next button
 function handleNext() {
     if (isNextEnabled) {
         nextQuestion();
     }
 }
 
-// Enable next button
 function enableNextButton() {
     isNextEnabled = true;
     document.getElementById('nextButton').style.display = 'block';
 }
 
-// Disable next button
 function disableNextButton() {
     isNextEnabled = false;
     document.getElementById('nextButton').style.display = 'none';
 }
-
-// Add CSS for the highlighted spans
-const style = document.createElement('style');
-style.innerHTML = `
-    .highlight {
-        color: red;
-        font-size: larger;
-        font-weight: bold;
-    }
-`;
-document.head.appendChild(style);
-
 function endQuiz() {
     clearInterval(timer); // Stop the timer
 
@@ -552,7 +593,14 @@ function endQuiz() {
 }
 function showQuizScreen(){
     document.getElementsByClassName("animated-button").style.display='block';
-} 
+    
+        document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
+        document.getElementById('welcomeScreen').style.display = 'none';
+        document.getElementById('quizScreen').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'none';
+        document.getElementById('endQuizButton').style.display = 'none';
+    }
+
 function showLeaderboardScreen() {
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboardScreen').style.display = 'block';
@@ -627,7 +675,6 @@ async function displayLeaderboard() {
 
     clearInterval(timer);
     document.getElementById('quizScreen').style.display = 'none';
-    document.getElementById('leaderboard').style.display = 'block';
     updateLeaderboard(loggedInUserId, score); // Pass user ID and score to updateLeaderboard
 
 

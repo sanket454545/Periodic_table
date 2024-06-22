@@ -438,7 +438,7 @@ body {
 #leaderboard {
     display: block; /* Ensure the leaderboard is visible */
     max-width: 600px; /* Adjust max-width as per your design */
-    margin: 0 auto; /* Center the leaderboard horizontally */
+    margin: 20px; /* Center the leaderboard horizontally */
     padding: 20px; /* Add padding for spacing */
     border: 1px solid #ccc; /* Add a border for container */
     background-color: #39b321; /* Light background color */
@@ -575,14 +575,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
-#scoree{
-    margin-left: 15px ;
-    font-size:24px;
-    font-weight: 400;
-    color: cyan;
-    box-shadow: #0dd2ec;
 
-}
 
 .options-grid button:hover {
     background-color: #ddd;
@@ -600,31 +593,77 @@ body {
 }
 
 #question {
-    margin-bottom: 20px;
-}
-
-#timer {
-    margin-top: 10px;
-    font-size: 1.2em;
-    color: #0dd2ec;
+    text-align: center;
+    margin: 2rem 0rem;
 }
 
 
-.header{
+
+
+.logoutbutton{
+    float: right;
+    margin-right: 20px;
+    display: inline;
+}
+
+
+.main-header{
     position: fixed;
     width: 100%;
     top: 0;
     width: 100%;
     text-align: center;
-
-}
-.logoutbutton{
-
-position:absolute;
-margin-right: 0%;
-margin-top: 2px;
-
-
-
+    margin: 20px;
 }
 
+.main-header p{
+    display: inline;
+    float: left;
+    margin: 10px;
+}
+
+#quizHeader p{
+    display: inline;
+}
+
+
+#score{
+    color: cyan;
+    display:inline;
+}
+
+#timer {
+    color: #0dd2ec;
+    display: inline;
+    float: right;
+}
+
+#correctAnsContainer{
+    border: 2px solid cyan;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    margin: 15px 0px;
+    text-align: center;
+    background-color: yellow;
+    visibility: hidden;
+}
+
+.element-info-box{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+}   
+#correctAnsContainer h3{
+    font-size: 16px;
+    color:green;
+}
+.element-info-box p{
+    display: inline-block;
+    flex: 50%;
+    width: max-content;
+    text-align: left;
+}
+
+#nextButton{
+    float: right;
+}

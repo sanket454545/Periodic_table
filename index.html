@@ -6,9 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Periodic Table Quiz</title>
     <link rel="stylesheet" href="style.css">
+    <script src="screens.js"></script>
     <script src="script.js"></script>
+    <script src="data.js"></script>
+    <script src="login.js"></script>
 </head>
 <body>
+
+    <header class="main-header">
+        <p >Welcome <span class="userName"></span>!</p>
+        <button class="logoutbutton animated-button" onclick="logout()" >Log out</button>
+    </header>
+
      <!-- Login Screen  -->
       
      <div id="loginScreen" class="container">
@@ -67,13 +76,32 @@
 
     <!-- Quiz Screen -->
   
-    <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: inline-block;">End Quiz</button>
+ 
     <div id="quizScreen" class="container" style="display: none;">
+        <div id="quizHeader">
+            <p id="score">Score: 0</p>
+            <p id="timer">Time left: 5:00</p>
+        </div>    
         <h2 id="question" class="question-text">#</h2>
         <div id="options" class="options-grid"></div>
-        <p id="timer">Time left: 5:00</p>
-        <button id="nextButton" class="animated-button" onclick="handleNext()" style="display: none;position: absolute;display: inline;">Next</button>
-        <p><a href="#" onclick="showQuizScreen()"></a></p>
+        
+
+        
+        <p>
+            <a href="#" onclick="showQuizScreen()"></a>
+        </p>
+
+        <div id="correctAnsContainer">
+            <h3><strong>Correct Answer</strong></h3>
+            <div id="correctAnswers"></div>  
+        </div>
+          
+        <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: inline-block;">End Quiz</button>
+        
+            
+        <button id="nextButton" class="animated-button" onclick="handleNext()">Next ></button>
+        
+
     </div>
 </div>
     <!-- Leaderboard Screen -->

@@ -56,20 +56,20 @@
     </div>
 
     <!-- Quiz Screen -->
-  
-    <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: inline-block;">End Quiz</button>
+  <div id="ouizScreenn" >
+    <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: block;">End Quiz</button>
     <div id="quizScreen" class="container" style="display: none;">
-         
         <h2 id="question" class="question-text">#</h2>
         <div id="options" class="options-grid"></div>
-        <p id="timer">Time left: 5:00</p>
+        <p id="timer" style="display: inline-block;">Time left: 5:00</p><p id="scoree" style="display: inline-block;margin-left: 65px ;
+        font-size:20px; font-weight: 400; color: cyan;box-shadow: #0dd2ec;">Score: 0</p>
         <button id="nextButton" class="animated-button" onclick="handleNext()" style="display: none;position: absolute;display: inline;">Next</button>
     </div>
-
+</div>
     <!-- Leaderboard Screen -->
     <div id="leaderboard" class="container" style="display: none;">
         <h2>Leaderboard</h2>
-        <p id="cont">Top Players <span id="loggedInUsername"></span></p>
+        <p id="cont " >Top Players <span id="loggedInUsername"></span></p>
         <table id="leaderboardTable" border="1">
             <tr>
                 <th>Name</th>
@@ -77,7 +77,7 @@
             </tr>
         </table>
         <div class="top-players">
-            <h2 class="section-title">Top Players</h2>
+            <h2 class="section-title"></h2>
             <div class="players">
                 <!-- Players will be dynamically added here -->
             </div>

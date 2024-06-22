@@ -74,19 +74,19 @@ function nextQuestion() {
         case 0:
             const randomElement1 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement1.name;
-            question = `What is the name of the element with symbol <br><span class="highlight">${randomElement1.symbol}</span>?`;
+            question = `What is the name of the element with symbol?<br><span class="highlight">${randomElement1.symbol}</span>`;
             options = getOptions(correctAnswer, 'name');
             break;
         case 1:
             const randomElement2 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement2.name; // Set correct answer to name instead of symbol
-            question = `What is the symbol for the element<br> <span class="highlight">${randomElement2.metals}</span>?`;
+            question = `What is the name of metals  element?<br> <span class="highlight">${randomElement2.metals}</span>`;
             options = getOptions(correctAnswer, 'name'); // Fetch options based on 'name' of the element
             break;
         case 2:
             const randomElement3 = elements[Math.floor(Math.random() * elements.length)];
             correctAnswer = randomElement3.name;
-            question = `What is the name of the element with atomic number<br> <span class="highlight">${randomElement3.atomicNumber}</span>?`;
+            question = `What is the name of the element with atomic number?<br> <span class="highlight">${randomElement3.atomicNumber}</span>`;
             options = getOptions(correctAnswer, 'name');
             break;
     }
@@ -283,36 +283,6 @@ async function displayLeaderboard() {
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
-
-
-function logout() {
-
-    localStorage.setItem("loginID", "");
-    localStorage.setItem("userName", "");
-
-    fetch('logout.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Logout request failed');
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert(data.message); // Display logout message
-        showLoginScreen(); // Show login screen after successful logout
-    })
-    .catch(error => {
-        console.error('Logout failed:', error);
-    });
-}
-
-
-
 
 function playAgain() {
     clearInterval(timer);

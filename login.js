@@ -60,7 +60,7 @@ function logout() {
         return response.json();
     })
     .then(data => {
-        alert(data.message); // Display logout message
+        //alert(data.message); // Display logout message
         showLoginScreen(); // Show login screen after successful logout
     })
     .catch(error => {

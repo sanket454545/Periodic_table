@@ -41,17 +41,30 @@
     text-align: center;
 }
 
+.highlight{
+    color:white;
+}
+
+#loginScreen p{
+    color: white;
+    text-align: center;
+    padding-top : 20px;
+}
+
+#loginScreen a{
+    color: yellow;
+}
+
 
 body {
     font-family: "Arial", sans-serif;
-    background-color: #f4f4f4;
+    background-color: #1a0a33;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('https://images.pexels.com/photos/11829673/pexels-photo-11829673.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

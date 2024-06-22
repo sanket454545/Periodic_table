@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
     if (password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id']; // Store user ID in session
-        echo json_encode(['message' => 'Login successful', 'user_id' => $user['id']]);
+        echo json_encode(['message' => 'Login successful', 'user_id' => $user['id'], 'userName' => $user['username']]);
     } else {
         echo json_encode(['message' => 'Invalid password']);
     }

@@ -145,6 +145,7 @@ function showLoginScreen() {
     document.getElementById('loginScreen').style.display = 'block';
     document.getElementById('endQuizButton').style.display = 'none';
     document.getElementById('endQuizButton').style.display = 'none';
+   
     document.getElementById('endQuizButton').style.display = 'none';// Show end quiz button
 }
 
@@ -182,20 +183,57 @@ function login() {
     .then(response => response.json())
     .then(data => {
         if (data.message === 'Login successful') {
-            alert('Login successful!');
+            //alert('Login successful!');
+
             loggedInUserId = data.user_id; // Store user ID
-            startQuiz(data.user_id); // Pass user ID
+            loggedInUserName = data.userName;
+            updateUserNames(loggedInUserName,loggedInUserId);
+            //startQuiz(data.user_id); // Pass user ID
+            showStartScreen();
         } else {
             alert(data.message);
         }
     });
 }
 
-function startQuiz(loggedInUserId) {
+function updateUserNames(userName, userID){
+
+    localStorage.setItem("loginID", userID);
+    localStorage.setItem("userName", userName);
+
+    //localStorage.getItem("lastname");
+
+    allUserNames = document.getElementsByClassName('userName');
+    for (var i=0; i< allUserNames.length ; i++){
+        allUserNames[i].innerText = userName;
+    }
+}
+
+window.onload = function(){
+    loggedInUserId = localStorage.getItem("loginID");
+    loggedInUserName = localStorage.getItem("userName");
+    if(loggedInUserId){
+        showStartScreen();
+        updateUserNames(loggedInUserName,loggedInUserId);
+    }
+}
+
+function showStartScreen(){
+    document.getElementById('startGame').style.display = 'block'; // Show quiz screen
+    document.getElementById('loginScreen').style.display = 'none'; // Hide login screen
+    document.getElementById('welcomeScreen').style.display = 'none'; // Hide welcome screen
+    document.getElementById('quizScreen').style.display = 'none';
+    document.getElementById('endQuizButton').style.display = 'none'; // Show quiz screen
+}    
+
+function startQuiz() {
     user_id = loggedInUserId; // Assuming user_id is a global variable for the logged-in user
     document.getElementById('loginScreen').style.display = 'none'; // Hide login screen
     document.getElementById('welcomeScreen').style.display = 'none'; // Hide welcome screen
-    document.getElementById('quizScreen').style.display = 'block'; // Show quiz screen
+    document.getElementById('startGame').style.display = 'none'; // Show quiz screen
+    document.getElementById('quizScreen').style.display = 'block'
+    document.getElementById('endQuizButton').style.display = 'block';
+    ; // Show quiz screen
     timer = setInterval(updateTimer, 1000); // Start quiz timer
     enableNextButton(); // Enable 'Next' button initially
     document.addEventListener('keydown', handleEnterKey); // Listen for Enter key
@@ -460,6 +498,10 @@ async function displayLeaderboard() {
 
 
 function logout() {
+
+    localStorage.setItem("loginID", "");
+    localStorage.setItem("userName", "");
+
     fetch('logout.php', {
         method: 'POST',
         headers: {
@@ -495,15 +537,17 @@ function showLoginScreen() {
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('endQuizButton').style.display = 'none';
+    document.getElementById('startGame').style.display = 'none';
 }
 
 function showLeaderboardScreen() {
+    document.getElementById('endQuizButton').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('registerScreen').style.display = 'none';
     document.getElementById('welcomeScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'block';
-    document.getElementById('endQuizButton').style.display = 'none';
+    
 }
 
 function showHelp() {
@@ -577,19 +621,6 @@ function enableNextButton() {
 function disableNextButton() {
     isNextEnabled = false;
     document.getElementById('nextButton').style.display = 'none';
-}
-
-// Function to start the quiz upon user login
-function startQuiz(loggedInUserId) {
-    user_id = loggedInUserId;
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('welcomeScreen').style.display = 'none';
-    document.getElementById('quizScreen').style.display = 'block';
-    timer = setInterval(updateTimer, 1000);
-    enableNextButton(); // Enable 'Next' button initially
-    document.addEventListener('keydown', handleEnterKey); // Listen for Enter key
-    updateTimerDisplay(); // Initialize timer display
-    nextQuestion(); // Start with the first question
 }
 
 // Function to update the timer display
@@ -694,10 +725,10 @@ async function displayLeaderboard() {
 }
 
 
-    clearInterval(timer);
-    document.getElementById('quizScreen').style.display = 'none';
-    document.getElementById('leaderboard').style.display = 'block';
-    updateLeaderboard(loggedInUserId, score); // Pass user ID and score to updateLeaderboard
+    //clearInterval(timer);
+    //document.getElementById('quizScreen').style.display = 'none';
+    //document.getElementById('leaderboard').style.display = 'block';
+    //updateLeaderboard(loggedInUserId, score); // Pass user ID and score to updateLeaderboard
 
 
 
@@ -718,7 +749,7 @@ function showLeaderboardScreen() {
     document.getElementById('welcomeScreen').style.display = 'none';
     document.getElementById('quizScreen').style.display = 'none';
     document.getElementById('leaderboard').style.display = 'block';
-    document.getElementById('endQuizButton').style.display = 'none'; // Show end quiz button
+    document.getElementById('endQuizButton').style.display = 'none'; //  dont show end quiz button
 }
 
 // Function to show the help screen

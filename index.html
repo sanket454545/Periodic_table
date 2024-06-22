@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,8 +9,9 @@
     <script src="script.js"></script>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="container">
+     <!-- Login Screen  -->
+      
+     <div id="loginScreen" class="container">
         <div class="container container-child">
             <h1>Welcome to Periodic Game</h1>
             <h3>Are you ready!</h3>
@@ -23,9 +25,16 @@
         </div>
         <button class="animated-button" onclick="login()">Login</button>
         <p>Don't have an account? <a href="#" onclick="showRegisterScreen()">Register here</a></p>
-    </div>
+    </div> 
+   
+     <!-- start button screen  -->
+ 
+     <div id="startGame" class="container" style="display: none;">
+            <h2 id="w"><span class="userName"></span>, Welcome to Periodic Table Game</h2><br>
+            <button id="B1" onclick="startQuiz()">Start The Game</button>    
+     </div> 
 
-    <!-- Registration Form -->
+     <!-- Registration Form  -->
     <div id="registerScreen" class="container" style="display: none;">
         <h2>Register</h2>
         <div id="register-input">
@@ -48,6 +57,7 @@
     <!-- Welcome Screen -->
     <div id="welcomeScreen" class="container" style="display: none;">
         <h1>Welcome to the Element Quiz!</h1>
+       
         <div id="user-input">
             <label class="animated-label" for="username">Enter your name:</label>
             <input class="animated-input" type="text" id="username" placeholder="Enter your name">
@@ -56,14 +66,28 @@
     </div>
 
     <!-- Quiz Screen -->
-  
-    <button class="animated-button" onclick="endQuiz()" id="endQuizButton" style="position: absolute; top: 20px; right: 20px; display: inline-block;">End Quiz</button>
+
+   
+    <div class="header">
+        <div>
+           <h2 id="welcomeMessage">Welcome <span class="userName"></span></h2>
+           <p id="timer">Time left: 5:00</p>
+            <button class="animated-button" id="endQuizButton" onclick="endQuiz()" >End Quiz</button>
+       </div>
+       <div class="logoutbutton">
+        <button class="animated-button" id="log"  onclick="logout()">Logout</button>
+   </div>
+      
+    </div>
+
+   
+    
     <div id="quizScreen" class="container" style="display: none;">
          
         <h2 id="question" class="question-text">#</h2>
         <div id="options" class="options-grid"></div>
-        <p id="timer">Time left: 5:00</p>
-        <button id="nextButton" class="animated-button" onclick="handleNext()" style="display: none;position: absolute;display: inline;">Next</button>
+        
+        <button id="nextButton" class="animated-button" onclick="handleNext()" style="display: inline; float: right; ">Next</button>
     </div>
 
     <!-- Leaderboard Screen -->
@@ -82,7 +106,7 @@
                 <!-- Players will be dynamically added here -->
             </div>
         </div>
-        <button class="animated-button" onclick="logout()">Logout</button>
+        
         <button class="animated-button" onclick="playAgain()">Play Again</button>
        
         <div id="userStats" style="display: none;">
@@ -91,4 +115,4 @@
     </div>
 
 </body>
-</html>
+</html>  

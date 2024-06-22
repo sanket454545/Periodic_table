@@ -6,6 +6,42 @@
     box-sizing: border-box;
 }
 
+#welcomeMessage{
+    text-align:  center;
+}
+
+/* css for start buttonscreen */
+
+#startGame {
+    text-align: center;
+}
+
+#child {
+    height: 400px;
+    width: 400px;
+    background-color: #3A6B35;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#B1 {
+    background-color: #E3b448;
+    width: 150px;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+#w {
+    color: #E3b448;
+    text-align: center;
+}
+
+
 body {
     font-family: "Arial", sans-serif;
     background-color: #f4f4f4;
@@ -29,7 +65,7 @@ body {
     padding: 20px;
      /*width: 400px;
    text-align: center;*/
-    animation: slideFromTop 0.5s ease-in-out;
+    /* animation: slideFromTop 0.5s ease-in-out; */
     max-width: 500px;
 }
 
@@ -72,7 +108,7 @@ h2 {
     display: inline-block;
     margin-bottom: 10px;
     font-size: 16px;
-    animation: slideDown 1s ease-in-out;
+    /* animation: slideDown 1s ease-in-out; */
     color: wheat;
 }
 
@@ -94,7 +130,7 @@ h2 {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    animation: fadeIn 1s ease-in-out;
+    /* animation: fadeIn 1s ease-in-out; */
     position: relative;
 }
 
@@ -323,11 +359,11 @@ right: 0;
 
 /* Apply animations to elements */
 #quizScreen {
-    animation: slideTop 1s forwards;
+    /* animation: slideTop 1s forwards; */
 }
 
 #question {
-    animation: slideRight 1s forwards;
+    /* animation: slideRight 1s forwards; */
 }
 
 #options {
@@ -406,7 +442,7 @@ body {
     padding: 20px; /* Add padding for spacing */
     border: 1px solid #ccc; /* Add a border for container */
     background-color: #39b321; /* Light background color */
-    animation: slideFromLeft 0.7s ease-in-out;
+    /* animation: slideFromLeft 0.7s ease-in-out; */
 }
 @keyframes slideFromLeft {
     0% {
@@ -429,7 +465,7 @@ body {
 #leaderboardTable {
     width: 100%; /* Table width to 100% */
     border-collapse: collapse; /* Collapse border-spacing */
-    animation: slideFromRight 0.7s ease-in-out;
+    /* animation: slideFromRight 0.7s ease-in-out; */
 }
 @keyframes slideFromRight {
     0% {
@@ -525,6 +561,10 @@ body {
     justify-content: center;
     gap: 10px;
 }
+#log{
+    margin-top: 0;
+    margin-right: 0;
+}
 
 .options-grid button {
     background-color: #f4f4f4;
@@ -557,9 +597,25 @@ body {
 #timer {
     margin-top: 10px;
     font-size: 1.2em;
-}
-#timer{
-    margin-top: 10px;
-    margin-bottom: 10px;
     color: #0dd2ec;
 }
+
+
+.header{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    width: 100%;
+    text-align: center;
+
+}
+.logoutbutton{
+
+position:absolute;
+margin-right: 0%;
+margin-top: 2px;
+
+
+
+}
+

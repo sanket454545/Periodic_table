@@ -442,7 +442,7 @@ body {
     padding: 20px; /* Add padding for spacing */
     border: 1px solid #ccc; /* Add a border for container */
     background-color: #39b321; /* Light background color */
-    /* animation: slideFromLeft 0.7s ease-in-out; */
+    animation: slideFromLeft 0.7s ease-in-out;
 }
 @keyframes slideFromLeft {
     0% {
@@ -479,14 +479,15 @@ body {
 }
 
 /* Style for table headers */
-#leaderboardTable th {
-    background-color: #c56f6f; /* Light gray background */
-    padding: 8px; /* Padding inside table header cells */
-    text-align: left; /* Left-align text in headers */
-    border: 1px solid #08366b; /* Border for table header cells */
-}
 
-/* Style for table rows */
+    #leaderboardTable th {
+        background-color: #21a0d9;
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #08366b;
+    }
+
+
 #leaderboardTable td {
     padding: 8px; /* Padding inside table cells */
     border: 1px solid #645252; /* Border for table cells */
@@ -573,6 +574,14 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+}
+#scoree{
+    margin-left: 15px ;
+    font-size:24px;
+    font-weight: 400;
+    color: cyan;
+    box-shadow: #0dd2ec;
+
 }
 
 .options-grid button:hover {

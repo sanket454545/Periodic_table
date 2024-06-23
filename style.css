@@ -616,7 +616,11 @@ body {
 .logoutbutton{
     float: right;
     margin-right: 20px;
-    display: inline;
+    display: inline;margin-top: 0;
+    position: absolute;
+    margin-bottom: 675px;
+    margin-left: 1200px;
+    display: none;
 }
 
 
@@ -627,6 +631,7 @@ body {
     width: 100%;
     text-align: center;
     margin: 20px;
+   
 }
 
 .main-header p{

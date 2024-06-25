@@ -45,6 +45,25 @@ function udpateUserNames(){
 }
 
 
+function register() {
+    const username = document.getElementById('registerUsername').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+
+    fetch('register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Registration successful') {
+            showScreen('loginScreen');
+        }
+    });
+}
+
+
 
 function logout() {
 

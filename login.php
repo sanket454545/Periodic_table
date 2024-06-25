@@ -16,13 +16,13 @@ if ($conn->connect_error) {
 
 // Get input data from JSON request
 $input = json_decode(file_get_contents('php://input'), true);
-$username = $input['username'];
+$email = $input['email'];
 $password = $input['password'];
 
 // Check username and password
-$sql = "SELECT * FROM users WHERE username = ?";
+$sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 

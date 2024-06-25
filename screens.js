@@ -3,7 +3,9 @@ const screens = ["loginScreen","registerScreen","startGame","help","welcomeScree
 function hideAllScreens(){
     screens.forEach(element => {
         document.getElementById(element).style.display="none"
+      
     });
+  
 }
 
 function showScreen(screenName){

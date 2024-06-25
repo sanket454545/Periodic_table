@@ -47,9 +47,9 @@
         <path fill="#00f5d4" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
     </svg>
     
-    <header class="main-header">
+    <header id="logout1" class="main-header">
         <p >Welcome <span class="userName"></span>!</p>
-        <button class="logoutbutton animated-button" onclick="logout()" >Log out</button>
+        
     </header>
 
      <!-- Login Screen  -->
@@ -139,6 +139,7 @@
     </div>
 </div>
     <!-- Leaderboard Screen -->
+    
     <div id="leaderboard" class="container" style="display: none;">
         <h2>Leaderboard</h2>
         <p id="cont " >Top Players <span id="loggedInUsername"></span></p>
@@ -160,6 +161,7 @@
         <div id="userStats" style="display: none;">
             <!-- User stats will be displayed here -->
         </div>
+        <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
     </div>
 
 </body>

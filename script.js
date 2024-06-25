@@ -30,6 +30,7 @@ function register() {
         alert(data.message);
         if (data.message === 'Registration successful') {
             showScreen('loginScreen');
+            
            
         }
     });
@@ -223,7 +224,8 @@ function endQuiz() {
     .catch(error => {
         console.error('Error saving score:', error);
     });
-
+    const correctAnsContainerr = document.getElementsByClassName('logoutbutton');
+    correctAnsContainerr.style.display = "block";
     //document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
 }
 
@@ -231,6 +233,7 @@ function updateScoreDisplay() {
     document.getElementById('score').innerText = `Score: ${score}`;
 }
 async function updateLeaderboard(user_id, score) {
+ 
     try {
         const response = await fetch('save_score.php', {
             method: 'POST',
@@ -247,14 +250,18 @@ async function updateLeaderboard(user_id, score) {
         }
 
         console.log(data.message); // Log success message
-        displayLeaderboard(); // Update leaderboard after saving score
+        displayLeaderboard();
+      
+        showScreen('logout1');// Update leaderboard after saving score
     } catch (error) {
         console.error('Error saving score:', error);
     }
+    
 }
 
 
 async function displayLeaderboard() {
+  
     console.log("displayLeaderboard called"); // Debugging log
     try {
         const response = await fetch('get_leaderboard.php');
@@ -275,11 +282,15 @@ async function displayLeaderboard() {
 
             nameCell.textContent = entry.username;
             scoreCell.textContent = entry.max_score;
+           
         });
+   
 
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
+    const correctAnsContainerr = document.getElementsById('logout1');
+    correctAnsContainerr.style.display = "block";
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
@@ -303,21 +314,8 @@ function handleEnterKey(event) {
     }
 }
 
-function handleNext() {
-    if (isNextEnabled) {
-        nextQuestion();
-    }
-}
 
-function enableNextButton() {
-    isNextEnabled = true;
-    document.getElementById('nextButton').style.display = 'block';
-}
 
-function disableNextButton() {
-    isNextEnabled = false;
-    document.getElementById('nextButton').style.display = 'none';
-}
 
 // Function to update the timer display
 function updateTimerDisplay() {
@@ -332,33 +330,11 @@ function showQuizScreen(){
     }
 
 
-// Function to update the leaderboard asynchronously
-async function updateLeaderboard(user_id, score) {
-    try {
-        const response = await fetch('save_score.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ score: score }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message || 'Failed to save score');
-        }
-
-        console.log(data.message);
-        displayLeaderboard();
-    } catch (error) {
-        console.error('Error saving score:', error);
-    }
-}
-
 // Function to handle showing the login screen
 function showLoginScreen() {
     showScreen("loginScreen")
+    const correctAnsContainerr = document.getElementsByClassName('main-header');
+    correctAnsContainerr.style.display = "none";
 }
 
 // Function to show the leaderboard screen
@@ -382,13 +358,7 @@ function playAgain() {
     nextQuestion();
 }
 
-// Function to handle Enter key press
-function handleEnterKey(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent form submission or other default Enter key behavior
-        handleNext();
-    }
-}
+
 
 // Function to handle the 'Next' button click
 function handleNext() {
@@ -414,74 +384,11 @@ function disableNextButton() {
 
 // Other functions (e.g., displayQuestion, checkAnswer, etc.) remain unchanged
 
-async function updateLeaderboard(username, score) {
-    try {
-        const response = await fetch('save_score.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                score: score,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save score');
-        }
-
-        const data = await response.json();
-        console.log(data.message);
-        await saveStats(username, score); // Wait for saving stats after saving score
-        await displayLeaderboard(); // Display leaderboard after updating
-    } catch (error) {
-        console.error('Error saving score:', error);
-    }
-}
-
-async function saveStats(username, score) {
-    try {
-        const response = await fetch('save_stats.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                score: score,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save stats');
-        }
-
-        const data = await response.json();
-        console.log(data.message);
-    } catch (error) {
-        console.error('Error saving stats:', error);
-    }
-}
 
 
-function showUserStats() {
-    fetch('get_user_stats.php')
-        .then(response => response.json())
-        .then(data => {
-            const statsContainer = document.getElementById('userStats');
-            statsContainer.innerHTML = `
-                <h3>${data.username}'s Stats</h3>
-                <p>Matches Played: ${data.matchesPlayed}</p>
-                <p>Total Score: ${data.totalScore}</p>
-                <p>Accuracy: ${data.accuracy}%</p>
-            `;
-            statsContainer.style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error fetching user stats:', error);
-        });
-}
+
+
+
 
 window.onload = function(){
     var loggedInUserID = localStorage.getItem("loginID");

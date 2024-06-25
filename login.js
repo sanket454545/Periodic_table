@@ -14,16 +14,19 @@ function login() {
     .then(data => {
         
         if (data.message === 'Login successful') {
+            showScreen("startGame")
             loggedInUserId = data.user_id; // Store user ID
             loggedInUserName = data.userName
+            
 
             updateUserDetails(loggedInUserId, loggedInUserName)
-
+            
             startQuiz(data.user_id); // Pass user ID
         } else {
             alert(data.message);
         }
     });
+   
 }
 
 function updateUserDetails(userID, userName){

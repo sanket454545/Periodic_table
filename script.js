@@ -224,8 +224,7 @@ function endQuiz() {
     .catch(error => {
         console.error('Error saving score:', error);
     });
-    const correctAnsContainerr = document.getElementsByClassName('logoutbutton');
-    correctAnsContainerr.style.display = "block";
+    
     //document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
 }
 
@@ -289,23 +288,11 @@ async function displayLeaderboard() {
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
-    const correctAnsContainerr = document.getElementsById('logout1');
-    correctAnsContainerr.style.display = "block";
+  
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
 
-function playAgain() {
-    clearInterval(timer);
-    score = 0;
-    timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
-    document.getElementById('leaderboard').style.display = 'none';
-    document.getElementById('quizScreen').style.display = 'block';
-    timer = setInterval(updateTimer, 1000);
-    enableNextButton(); // Ensure 'Next' button is enabled when playing again
-    nextQuestion();
-    endQuiz()
-}
 
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
@@ -317,12 +304,7 @@ function handleEnterKey(event) {
 
 
 
-// Function to update the timer display
-function updateTimerDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    document.getElementById('timer').innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-}
+
 
 
 function showQuizScreen(){
@@ -351,7 +333,7 @@ function playAgain() {
     score = 0;
     timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
 
-    showScreen("quizScreen")
+    showScreen("startGame");
 
     timer = setInterval(updateTimer, 1000);
     enableNextButton(); // Ensure 'Next' button is enabled when playing again

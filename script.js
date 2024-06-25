@@ -5,6 +5,8 @@ let timeLeft = 300; // 5 minutes (300 seconds)
 let isAnswerSelected = false;
 let isNextEnabled = false; // Track if 'Next' button should be enabled
 
+let gamePlay = [];
+
 function showRegisterScreen() {
     showScreen("registerScreen")
 }
@@ -14,30 +16,8 @@ function showHelp() {
 }
 
 
-
-function register() {
-    const username = document.getElementById('registerUsername').value;
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
-
-    fetch('register.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        if (data.message === 'Registration successful') {
-            showScreen('loginScreen');
-            
-           
-        }
-    });
-}
-
-
 function startQuiz() {
+    gamePlay = [];
     showScreen("quizScreen")
     user_id = localStorage.getItem("loginID"); // Assuming user_id is a global variable for the logged-in user
     timer = setInterval(updateTimer, 1000); // Start quiz timer
@@ -111,6 +91,16 @@ function getOptions(correctAnswer, key) {
 }
 
 function displayQuestion(question, options, correctAnswer) {
+
+    let obj = {
+        "question":question,
+        "options":options,
+        "correctAnswer": correctAnswer,
+        "selectedOption" : ""
+    }
+
+    gamePlay.push(obj);
+
     isAnswerSelected = false;
     const questionText = document.getElementById('question');
     questionText.innerHTML = question;
@@ -152,6 +142,10 @@ function checkAnswer(button, correctAnswer) {
             btn.classList.add('incorrect');
         }
     });
+
+    gamePlay[gamePlay.length-1].selectedOption = button.innerText;
+
+    console.log(gamePlay)
 
     const elementInfo = elements.find(el => el.name === correctAnswer);
     if (elementInfo) {
@@ -204,6 +198,10 @@ function endQuiz() {
     console.log("endQuiz called"); // Debugging log
     clearInterval(timer); // Assuming 'timer' is defined elsewhere to track quiz time
 
+    let gamePlayData = JSON.stringify(gamePlay)
+    
+    console.log(gamePlayData)
+
     const scoreData = { score: score }; // Assuming 'score' is defined elsewhere
 
     // Send score data to save_score.php
@@ -224,7 +222,8 @@ function endQuiz() {
     .catch(error => {
         console.error('Error saving score:', error);
     });
-    
+    const correctAnsContainerr = document.getElementsByClassName('logoutbutton');
+    correctAnsContainerr.style.display = "block";
     //document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
 }
 
@@ -288,11 +287,23 @@ async function displayLeaderboard() {
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
-  
+    const correctAnsContainerr = document.getElementsById('logout1');
+    correctAnsContainerr.style.display = "block";
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
 
+function playAgain() {
+    clearInterval(timer);
+    score = 0;
+    timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('quizScreen').style.display = 'block';
+    timer = setInterval(updateTimer, 1000);
+    enableNextButton(); // Ensure 'Next' button is enabled when playing again
+    nextQuestion();
+    endQuiz()
+}
 
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
@@ -304,7 +315,12 @@ function handleEnterKey(event) {
 
 
 
-
+// Function to update the timer display
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer').innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
 
 
 function showQuizScreen(){
@@ -333,7 +349,7 @@ function playAgain() {
     score = 0;
     timeLeft = 300; // Reset timer to 5 minutes (300 seconds)
 
-    showScreen("startGame");
+    showScreen("startGame")
 
     timer = setInterval(updateTimer, 1000);
     enableNextButton(); // Ensure 'Next' button is enabled when playing again

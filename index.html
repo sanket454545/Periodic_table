@@ -47,9 +47,11 @@
         <path fill="#00f5d4" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
     </svg>
     
-    <header id="logout1" class="main-header">
+    <header class="main-header">
         <p >Welcome <span class="userName"></span>!</p>
-        
+        <button class="animated-button myLeaderboard_btn" onclick="displayMyLeaderboard()" style="display:none">My Game Records</button>
+        <button class="animated-button leaderboard_btn" onclick="displayMyLeaderboard()" style="display:none">Leaderboard</button>
+        <button class="animated-button logout_btn" onclick="logout()" style="display:none">Log out</button>
     </header>
 
      <!-- Login Screen  -->
@@ -75,7 +77,6 @@
      <div id="startGame" class="container" style="display: none;">
             <h2 id="w"><span class="userName"></span> Welcome to Periodic Table Game</h2><br>
             <button id="B1" onclick="startQuiz()">Start The Game</button>   
-            <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button> 
      </div> 
 
      <!-- Registration Form  -->
@@ -161,9 +162,8 @@
        
         <div id="userStats" style="display: none;">
             <!-- User stats will be displayed here -->
-        </div>0
-        <button class="logoutbutton animated-button" id="logout1"   onclick="displayMyLeaderboard()" style="position: absolute; top: 20px; right: 200px; display: inline-block;">My Leaderboard</button>
-        <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
+        </div>
+        
     </div>
 
 
@@ -193,9 +193,8 @@
        
         <div id="userStats" style="display: none;">
             <!-- User stats will be displayed here -->
-        </div>0
-        <button class="logoutbutton animated-button" id="logout1"   onclick="displayMyLeaderboard()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
-        <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
+        </div>
+        
     </div>
 
 

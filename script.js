@@ -26,6 +26,7 @@ function startQuiz() {
     updateTimerDisplay(); // Initialize timer display
     nextQuestion(); // Start with the first question
     startTime=new Date();
+    
     loggedInUserId = localStorage.getItem("loginID");
 }
 
@@ -200,6 +201,7 @@ function endQuiz() {
     console.log("endQuiz called"); // Debugging log
     clearInterval(timer); // Assuming 'timer' is defined elsewhere to track quiz time
     endTime=new Date();
+   
     
     
     console.log(gamePlay)
@@ -328,7 +330,7 @@ async function displayMyLeaderboard() {
         if (!myLeaderboardTable) {
             throw new Error('myLeaderboardTable not found in HTML');
         }
-
+        
         // Clear existing rows except the header row
         while (myLeaderboardTable.rows.length > 1) {
             myLeaderboardTable.deleteRow(1);
@@ -337,6 +339,7 @@ async function displayMyLeaderboard() {
         if (myLeaderboard.length === 0) {
             const messageRow = myLeaderboardTable.insertRow();
             const messageCell = messageRow.insertCell();
+         
             messageCell.colSpan = 4; // Span across all columns
             messageCell.textContent = 'No leaderboard data found';
         } else {
@@ -346,6 +349,7 @@ async function displayMyLeaderboard() {
                 const startTimeCell = newRow.insertCell(1);
                 const endTimeCell = newRow.insertCell(2);
                 const gamePlayCell = newRow.insertCell(3);
+             
 
                 scoreCell.textContent = entry.score;
                 startTimeCell.textContent = new Date(entry.start_time).toLocaleString();

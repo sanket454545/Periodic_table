@@ -12,4 +12,8 @@ function showScreen(screenName){
     hideAllScreens()
     document.getElementById(screenName).style.display = "block";
     udpateUserNames()
+
+    switch(screenName){
+      
+           
 }

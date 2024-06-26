@@ -391,7 +391,7 @@ right: 0;
 }
 
 #options {
-    animation: slideLeft 1s forwards;
+    /*animation: slideLeft 1s forwards;*/
 }
 
 
@@ -597,7 +597,7 @@ body {
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    /*transition: background-color 0.3s, transform 0.2s;*/
 }
 
 
@@ -695,4 +695,10 @@ body {
 
 #nextButton{
     float: right;
+}
+
+
+.main-header button{
+    float:right;
+    margin:0px 5px;
 }

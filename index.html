@@ -73,7 +73,7 @@
      <!-- start button screen  -->
  
      <div id="startGame" class="container" style="display: none;">
-            <h2 id="w"><span class="userName"></span>, Welcome to Periodic Table Game</h2><br>
+            <h2 id="w"><span class="userName"></span> Welcome to Periodic Table Game</h2><br>
             <button id="B1" onclick="startQuiz()">Start The Game</button>   
             <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button> 
      </div> 
@@ -161,9 +161,44 @@
        
         <div id="userStats" style="display: none;">
             <!-- User stats will be displayed here -->
-        </div>
+        </div>0
+        <button class="logoutbutton animated-button" id="logout1"   onclick="displayMyLeaderboard()" style="position: absolute; top: 20px; right: 200px; display: inline-block;">My Leaderboard</button>
         <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
     </div>
+
+
+
+<!-- myleadeboae -->
+
+    <div id="myLeaderboard" class="container" style="display: none;">
+        <h2>Leaderboard</h2>
+        <p id="cont " >Top Players <span id="loggedInUsername"></span></p>
+        <table id="myLeaderboardTable" border="1">
+            <tr>
+               
+                <th>Score</th>
+                <th>starttime</th>
+                <th>endtime</th>
+                <th>gmeplay</th>
+            </tr>
+        </table>
+        <div class="top-players">
+            <h2 class="section-title"></h2>
+            <div class="players">
+                <!-- Players will be dynamically added here -->
+            </div>
+        </div>
+        
+        <button class="animated-button" onclick="playAgain()">Play Again</button>
+       
+        <div id="userStats" style="display: none;">
+            <!-- User stats will be displayed here -->
+        </div>0
+        <button class="logoutbutton animated-button" id="logout1"   onclick="displayMyLeaderboard()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
+        <button class="logoutbutton animated-button" id="logout1"   onclick="logout()" style="position: absolute; top: 20px; right: 20px; display: inline-block;">Log out</button>
+    </div>
+
+
 
 </body>
 </body>

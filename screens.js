@@ -1,4 +1,4 @@
-const screens = ["loginScreen","registerScreen","startGame","help","welcomeScreen","leaderboard","quizScreen"]
+const screens = ["loginScreen","registerScreen","startGame","help","welcomeScreen","leaderboard","quizScreen","myLeaderboard"]
 
 function hideAllScreens(){
     screens.forEach(element => {

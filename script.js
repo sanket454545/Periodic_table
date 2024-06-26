@@ -4,7 +4,7 @@ let timer;
 let timeLeft = 300; // 5 minutes (300 seconds)
 let isAnswerSelected = false;
 let isNextEnabled = false; // Track if 'Next' button should be enabled
-
+let startTime,endTime;
 let gamePlay = [];
 
 function showRegisterScreen() {
@@ -25,6 +25,8 @@ function startQuiz() {
     document.addEventListener('keydown', handleEnterKey); // Listen for Enter key
     updateTimerDisplay(); // Initialize timer display
     nextQuestion(); // Start with the first question
+    startTime=new Date();
+    loggedInUserId = localStorage.getItem("loginID");
 }
 
 function updateTimer() {
@@ -197,23 +199,38 @@ function updateScoreDisplay() {
 function endQuiz() {
     console.log("endQuiz called"); // Debugging log
     clearInterval(timer); // Assuming 'timer' is defined elsewhere to track quiz time
-
-    let gamePlayData = JSON.stringify(gamePlay)
+    endTime=new Date();
     
-    console.log(gamePlayData)
+    
+    console.log(gamePlay)
 
     const scoreData = { score: score }; // Assuming 'score' is defined elsewhere
 
     // Send score data to save_score.php
     fetch('save_score.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(scoreData)
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            user_id: loggedInUserId,
+            score:score,
+            start_time: startTime.toISOString(),
+            end_time: endTime.toISOString(),
+            game_play:JSON.stringify(gamePlay)
+        })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse JSON only if response is OK
+    })
     .then(data => {
+        // Handle JSON data here
+        console.log(data.message);
         if (data.message === 'Score saved successfully') {
-            showScreen("leaderboard")
+            showScreen("leaderboard");
             displayLeaderboard(); // After saving score, update leaderboard
         } else {
             alert(data.message); // Handle error if score couldn't be saved
@@ -222,15 +239,16 @@ function endQuiz() {
     .catch(error => {
         console.error('Error saving score:', error);
     });
-    const correctAnsContainerr = document.getElementsByClassName('logoutbutton');
-    correctAnsContainerr.style.display = "block";
-    //document.getElementById('endQuizButton').style.display = 'block'; // Show end quiz button
+    showScreen("leaderboard");
+   
+  
+    
 }
 
 function updateScoreDisplay() {
     document.getElementById('score').innerText = `Score: ${score}`;
 }
-async function updateLeaderboard(user_id, score) {
+async function updateLeaderboard(user_id,score,startTime,endTime) {
  
     try {
         const response = await fetch('save_score.php', {
@@ -238,7 +256,11 @@ async function updateLeaderboard(user_id, score) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ score: score }),
+            body: JSON.stringify({ 
+                user_id:user_id,
+                score: score ,
+            start_time:startTime.toISOString(),
+        end_time:endTime.toISOString})
         });
 
         const data = await response.json();
@@ -287,11 +309,59 @@ async function displayLeaderboard() {
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
-    const correctAnsContainerr = document.getElementsById('logout1');
-    correctAnsContainerr.style.display = "block";
+  
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated
+async function displayMyLeaderboard() {
+    console.log("displayMyLeaderboard called"); // Debugging log
+    try {
+        const response = await fetch('get_myLeaderboard.php');
+        if (!response.ok) {
+            throw new Error('Failed to fetch my leaderboard');
+        }
+
+        const myLeaderboard = await response.json();
+        console.log('Fetched my leaderboard data:', myLeaderboard); // Debugging: Check if data is received correctly
+
+        const myLeaderboardTable = document.getElementById('myLeaderboardTable');
+        if (!myLeaderboardTable) {
+            throw new Error('myLeaderboardTable not found in HTML');
+        }
+
+        // Clear existing rows except the header row
+        while (myLeaderboardTable.rows.length > 1) {
+            myLeaderboardTable.deleteRow(1);
+        }
+
+        if (myLeaderboard.length === 0) {
+            const messageRow = myLeaderboardTable.insertRow();
+            const messageCell = messageRow.insertCell();
+            messageCell.colSpan = 4; // Span across all columns
+            messageCell.textContent = 'No leaderboard data found';
+        } else {
+            myLeaderboard.forEach(entry => {
+                const newRow = myLeaderboardTable.insertRow();
+                const scoreCell = newRow.insertCell(0);
+                const startTimeCell = newRow.insertCell(1);
+                const endTimeCell = newRow.insertCell(2);
+                const gamePlayCell = newRow.insertCell(3);
+
+                scoreCell.textContent = entry.score;
+                startTimeCell.textContent = new Date(entry.start_time).toLocaleString();
+                endTimeCell.textContent = new Date(entry.end_time).toLocaleString();
+                gamePlayCell.textContent = JSON.stringify(gamePlay);
+            });
+        }
+
+       // Show the leaderboard screen after populating data
+
+    } catch (error) {
+        console.error('Error fetching or displaying my leaderboard:', error);
+    }
+    showScreen("myLeaderboard"); 
+}
+
 
 function playAgain() {
     clearInterval(timer);

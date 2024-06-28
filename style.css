@@ -701,4 +701,5 @@ body {
 .main-header button{
     float:right;
     margin:0px 5px;
+    display: none;
 }

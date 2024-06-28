@@ -283,7 +283,7 @@ async function updateLeaderboard(user_id,score,startTime,endTime) {
 
 
 async function displayLeaderboard() {
-  
+    showScreen("leaderboard");
     console.log("displayLeaderboard called"); // Debugging log
     try {
         const response = await fetch('get_leaderboard.php');
@@ -311,7 +311,7 @@ async function displayLeaderboard() {
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
     }
-  
+  showScreen("leaderboard");
 }
 
 // Call displayLeaderboard() when the leaderboard screen is shown or when scores are updated

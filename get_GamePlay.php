@@ -22,14 +22,17 @@ if ($conn->connect_error) {
 }
 
 $user_id = $_SESSION['user_id']; // Get user ID from session
+// Get input data from JSON request
+$input = json_decode(file_get_contents('php://input'), true);
+$id = $input['id'];
 
 // Fetch the leaderboard data sorted by score descending for the specific user
 $sql = "SELECT id,score, start_time, end_time ,game_play
         FROM leaderboard 
-        WHERE user_id = ? 
+        WHERE user_id = ? and id= ? 
         ORDER BY score DESC";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("ii", $user_id,$id);
 $stmt->execute();
 $result = $stmt->get_result();
 

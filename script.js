@@ -343,18 +343,35 @@ async function displayMyLeaderboard() {
             messageCell.colSpan = 4; // Span across all columns
             messageCell.textContent = 'No leaderboard data found';
         } else {
+            let count=0;
             myLeaderboard.forEach(entry => {
                 const newRow = myLeaderboardTable.insertRow();
                 const scoreCell = newRow.insertCell(0);
                 const startTimeCell = newRow.insertCell(1);
                 const endTimeCell = newRow.insertCell(2);
-                const gamePlayCell = newRow.insertCell(3);
+                const totalTime = newRow.insertCell(3);
+                const gamePlayCell = newRow.insertCell(4);
              
 
                 scoreCell.textContent = entry.score;
                 startTimeCell.textContent = new Date(entry.start_time).toLocaleString();
                 endTimeCell.textContent = new Date(entry.end_time).toLocaleString();
-                gamePlayCell.textContent = JSON.stringify(gamePlay);
+                
+                var startDate = new Date(entry.start_time);
+                // Do your operations
+                var endDate   = new Date(entry.end_time);
+                var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+
+                totalTime.textContent = String(seconds)
+
+                var evt = document.createEvent("Event");
+                evt.data = entry
+
+                gamePlayCell.innerHTML = "<button id='"+entry.id+"' onClick='onShowGamePlayClick(event)'>View Game Play</button>";
+                
+                //document.getElementById(entry.id).addEventListener("onGamePlayClick",document.getElementById(entry.id).dispatchEvent(evt))
+
+                count++;
             });
         }
 
@@ -364,6 +381,60 @@ async function displayMyLeaderboard() {
         console.error('Error fetching or displaying my leaderboard:', error);
     }
     showScreen("myLeaderboard"); 
+}
+
+
+
+function onShowGamePlayClick(e){
+
+    const id = e.target.id;
+
+    fetch('get_GamePlay.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+    })
+    .then(response => response.json())
+    .then(data => {
+            console.log(data)
+            displayMyGamePlayDetails(data[0].game_play)        
+    });
+
+}
+
+function displayMyGamePlayDetails(gamePlayData){
+    gamePlayData = gamePlayData.replace("<br>"," ")
+    
+    gamePlayData= JSON.parse(gamePlayData);
+
+    let tableData = "<table class='gamePlay'><thead><tr><th>Q.No.</th><th>Question</th><th>Correct Ans</th><th>Wrong Ans</th></tr></thead><tbody>";
+
+    for (var i=0;i<gamePlayData.length;i++){
+        let isCorrect ="myGamePlay_inCorrect"
+        if(gamePlayData[i].correctAnswer == gamePlayData[i].selectedOption){
+            isCorrect = "myGamePlay_correct"
+        }
+        tableData +="<tr class='"+isCorrect+"'><td>"
+        tableData += JSON.stringify((i+1))
+        tableData +="</td><td>"
+        strQuestion = gamePlayData[i].question.replace('"',"")
+        tableData += strQuestion
+        tableData +="</td><td>"
+        strcorrectAnswer = gamePlayData[i].correctAnswer.replace('"',"")
+        tableData += strcorrectAnswer
+        tableData +="</td><td>"
+        strselectedOption = gamePlayData[i].selectedOption.replace('"',"")
+        tableData += strselectedOption
+        tableData +="</td></tr>"
+    }
+    
+    tableData +="</tbody></table>"
+
+    let myGamePlay = document.getElementById("myLederboardGamePlay")
+    myGamePlay.innerHTML = tableData;
+    myGamePlay.style.display = "block";
+
+
 }
 
 
@@ -458,13 +529,16 @@ function disableNextButton() {
 
 
 
-
+function onLeaderBoardClose(e){
+    if(e.target.id == "myLederboardGamePlay")
+        e.target.style.display = "none"
+}
 
 
 
 window.onload = function(){
     var loggedInUserID = localStorage.getItem("loginID");
     if(loggedInUserID){
-        showScreen("startGame")
+        displayMyLeaderboard()
     }
 }

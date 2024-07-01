@@ -1,25 +1,28 @@
-const screens = ["loginScreen","registerScreen","startGame","welcomeScreen","leaderboard","quizScreen","myLeaderboard"]
+const screens = ["myLederboardGamePlay","loginScreen","registerScreen","startGame","welcomeScreen","leaderboard","quizScreen","myLeaderboard"]
+const buttons =["logout5","mygamebutton","leaderboard5"]
 
 function hideAllScreens(){
     screens.forEach(element => {
         document.getElementById(element).style.display="none"
-      
+    });
+}
+
+function hideAllButtons(){
+    buttons.forEach(element => {
+        document.getElementById(element).style.display="none"
     });
 }
 
 function showScreen(screenName){
     hideAllScreens()
+    hideAllButtons()
     document.getElementById(screenName).style.display = "block";
     udpateUserNames()
 
        switch(screenName){
 
 
-           case 'loginScreen':
-                  
-                   document.getElementById("logout5").style.display = "none";
-                   document.getElementById( "mygamebutton").style.display = "none";
-                   document.getElementById("leaderboard5").style.display = "none";
+            case 'loginScreen':
 
             break;
 
@@ -29,30 +32,23 @@ function showScreen(screenName){
             
             case 'startGame':
                 document.getElementById("logout5").style.display = "block";
-                document.getElementById( "mygamebutton").style.display = "none";
+                document.getElementById( "mygamebutton").style.display = "block";
             break;
 
             case 'welcomeScreen':
 
             break;
             case 'leaderboard':
-                document.getElementById("leaderboard5").style.display = "none";
                 document.getElementById("logout5").style.display = "block";
                 document.getElementById( "mygamebutton").style.display = "block";
                
 
             break;
             case 'quizScreen':
-                document.getElementById("logout5").style.display = "none";
 
             break;
             case 'myLeaderboard':
-               
-                  document.getElementById("leaderboard").style.display = "none";
                   document.getElementById("leaderboard5").style.display = "block";
-                  document.getElementById("mygamebutton").style.display = "none";
-
-                  
             break;
            
     }
